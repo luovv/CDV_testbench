@@ -1,0 +1,32 @@
+// Agent environment in project hri.mas2j
+
+/* Initial beliefs and rules */
+
+/* Initial goals */
+!setup.
+
+/* Plans */
+
++!setup : meta <- !activate.
++!setup : true <- !setup.
+
++!activate : food <- -meta[source(meta)];.print("food"); tofile("tell food"); tofile("receivesignal");coverage("plan1");!changeMind.
+
++!changeMind: recharge <- .send(robot_code,tell,recharge);!done.
++!changeMind: not recharge <- .send(robot_code,tell,feed);!chooseLaser.
+
++!chooseLaser : stop000 <- stop000; -stop000[source(percept)]; coverage("plan9"); !waitingFood.
++!chooseLaser : stop001 <- stop001; -stop000[source(percept)]; coverage("plan10"); !waitingFood.
++!chooseLaser : stop010 <- stop010; -stop010[source(percept)]; coverage("plan11"); !waitingFood.
++!chooseLaser : stop011 <- stop011; -stop011[source(percept)]; coverage("plan12"); !waitingFood.
++!chooseLaser : stop100 <- stop100; -stop100[source(percept)]; coverage("plan13"); !waitingFood.
++!chooseLaser : stop101 <- stop101; -stop101[source(percept)]; coverage("plan14"); !waitingFood.
++!chooseLaser : stop110 <- stop110; -stop110[source(percept)]; coverage("plan15"); !waitingFood.
++!chooseLaser : stop111 <- stop111; -stop111[source(percept)]; coverage("plan16"); !waitingFood.
+
++!waitingFood: not feedReady <-.print("Waiting food"); coverage("plan5");!waitingFood.
++!waitingFood: feedReady <- -feedReady[source(robot_code)]; coverage("plan6"); !done.
+
++!done: true <-.print("done"); coverage("plan5").
+
+

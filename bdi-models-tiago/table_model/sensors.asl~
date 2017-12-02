@@ -1,0 +1,16 @@
+// Agent sensing in project hri.mas2j
+
+/* Initial beliefs and rules */
+
+/* Initial goals */
+
+/* Plans */
++sense <- -sense[source(robot_code)];.print("sensing"); !getGaze.
+
++!getLaser : not close & not recharge<- .print("Undefined gaze"); !getLaser.
++!getLaser : close<- .send(robot_code,tell,close); !getLaser.
++!getLaser : not close & recharge<- .print("Undefined gaze"); !finish.
+
++!finish : true <- .send(robot_code,tell,sensorsReady); -gaze(1.0)[source(self)]; -gaze(0.0)[source(self)]; -pressure(1.0)[source(self)];-pressure(0.0)[source(self)];-handpos(1.0)[source(self)]; -handpos(0.0)[source(self)].
+
+
