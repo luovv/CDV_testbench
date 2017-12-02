@@ -7,30 +7,50 @@
 
 /* Plans */
 
-+!reset :  true <- add_time(20);.print("Robot is resetting"); coverage_robot("p1");!waiting.
++!reset :  true <- add_time(10);.print("Robot is resetting"); coverage("robot-p1");!waiting.
 
-+!waiting : not feed & not timeup<- .print("Waiting"); !waiting.
-+!waiting : feed <- add_time(40);.print("You asked for feed");coverage_robot("p2"); -food[source(human)]; !readSensor.
-+!waiting : not feed & timeup <- -food[source(human)];.print("timeup"); !recharge.
-+!waiting : recharge <- -recharge[source(human)]; add_time(40); .print("recharge");  !recharge.
++!waiting : not feed & not clean & not fridge & not sink & not timeup<- .print("Waiting"); !waiting.
++!waiting : not feed & not clean & not fridge & not sink & timeup <- -food[source(human)];.print("timeup"); !recharge.
 
-+!readSensor : not sensorsReady <- .send(sensors,tell,sense);!readSensor.
-+!readSensor : sensorsReady <-.send(sensors,tell,sense); !goToFrige.
++!waiting : feed <- add_time(10);.print("You asked for feed");coverage("robot-p2"); -feed[source(human)]; !moveToFridge.
++!waiting : clean <- add_time(10);.print("You asked for clean");coverage("robot-p3"); -clean[source(human)]; !moveToHuman.
++!waiting : fridge <- add_time(10);.print("You asked for fridge");coverage("robot-p4"); -fridge[source(human)]; !moveToFridge.
++!waiting : sink <- add_time(10);.print("You asked for sink");coverage("robot-p5"); -sink[source(human)]; !moveToSink.
++!waiting : recharge <- add_time(10);.print("You asked for recharge"); coverage("robot-p6"); -recharge[source(human)]; !recharge.
 
-+!goToFrige : not stop1(1) <- add_time(30);.print("go to frige"); coverage_robot("p3");!grabFood.
-+!grabFood : not stop2(1) <- add_time(30);.print("grab food"); coverage_robot("p3");!goToTable.
-+!goToTable : not stop3(1) & feed <- add_time(30);.print("go to table"); coverage_robot("p3");!foodReady.
+//+!readSensor : not sensorsReady <- .send(sensors,tell,sense);!readSensor.
+//+!readSensor : sensorsReady <-.send(sensors,tell,sense); !goToFrige.
+
+//+!moveToFridge : not stop1(1) <- add_time(10);.print("go to frige"); coverage_robot("p3");!grabFood.
+//+!grabFood : not stop2(1) <- add_time(10);.print("grab food"); coverage_robot("p3");!goToTable.
+//+!goToTable : not stop3(1) & feed <- add_time(10);.print("go to table"); coverage_robot("p3");!foodReady.
 
 
-+!goToFrige : stop1(1) <- add_time(30);.print("Grabbed object"); coverage_robot("p3");!pause1.
-+!grabFood : stop2(1) <- add_time(30);.print("Grabbed object"); coverage_robot("p3");!pause2.
-+!goToTable : stop3(1) <- add_time(30);.print("Grabbed object"); coverage_robot("p3"); !pause3.
++!moveToFridge : feed <- add_time(10);.print("Move to fridge"); coverage("robot-p7");!grabFood.
++!grabFood : feed <- add_time(10);.print("Grab Food"); coverage("robot-p8");!moveToHuman.
++!moveToHuman: feed <- add_time(10);.print("Move to human"); coveraget("robot-p9");!recharge.
 
-+!pause1 : true <- !grabFood.
-+!pause2 : true <- !goToTable.
-+!pause3 : true <- !foodReady.
++!moveToHuman: clean <- add_time(10);.print("Move to human"); coverage("robot-p10");!grabFood.
++!grabFood : clean <- add_time(10);.print("Grab food"); coverage("robot-p11");!moveToSink.
++!moveToSink: clean <- add_time(10);.print("Move to sink"); coverage("robot-p12");!dropSink.
++!dropSink : clean <- add_time(10);.print("Drop sink"); coverage("robot-p13");!recharge.
 
-+!foodReady : true <- .send(human,tell,feedReady);!done.
-+!recharge : true <- .print("recharge");!done.
++!moveToFridge : fridge <- add_time(10);.print("move to Fridge"); coverage("robot-p14");!recharge.
 
-+!done : true <- coverage_robot("p11").
++!moveToSink : sink <- add_time(10);.print("go to frige"); coverage("robot-p15");!recharge.
+
++!recharge : true <- .print("recharge"); coverage("robot-p16");!waiting.
+
+//+!grabFood : stop2(1) <- add_time(30);.print("Grabbed object"); coverage_robot("p3");!pause2.
+//+!goToTable : stop3(1) <- add_time(30);.print("Grabbed object"); coverage_robot("p3"); !pause3.
+
+//+!pause1 : true <- !grabFood.
+//+!pause2 : true <- !goToTable.
+//+!pause3 : true <- !foodReady.
+
+//+!foodReady : true <- .send(human,tell,feedReady);!done.
+//+!recharge : true <- .print("recharge");!done.
+
+
+
+//+!done : true <- coverage_robot("p11").

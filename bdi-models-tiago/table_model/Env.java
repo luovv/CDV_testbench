@@ -78,61 +78,21 @@ public class Env extends Environment {
 			return true;
 		}
 		else if (action.getFunctor().startsWith("coverage")) {
-			//String th = action.getTerm(0).toString();
-			//th = th.substring(1, th.length( ) - 1);
-			//try{
-			//	addPercept("meta",Literal.parseLiteral(action.getTerm(0).toString()));	
-			//	coverage(th);
-			//} catch (IOException e) {
-			//}
+			String th = action.getTerm(0).toString();
+			th = th.substring(1, th.length( ) - 1);
+			try{
+				//addPercept("meta",Literal.parseLiteral(action.getTerm(0).toString()));	
+				coverage(th);
+			} catch (IOException e) {
+			}
 			return true;
 		}
-		else if (action.getFunctor().equals("stop000")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(0)"));
+		else if (action.getFunctor().equals("stop1")) {
+			addPercept("sensors",Literal.parseLiteral("stop(1)"));
 			return true;
-		} 
-		else if (action.getFunctor().equals("stop001")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(1)"));
-			return true;
-		} 
-		else if (action.getFunctor().equals("stop010")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(0)"));
-			return true;
-		} 
-		else if (action.getFunctor().equals("stop011")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(1)"));
-			return true;
-		} 
-		else if (action.getFunctor().equals("stop100")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(0)"));
-			return true;
-		} 
-		else if (action.getFunctor().equals("stop101")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(0)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(1)"));
-			return true;
-		} 
-		else if (action.getFunctor().equals("stop110")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(0)"));
-			return true;
-		} 
-		else if (action.getFunctor().equals("stop111")) {
-			addPercept("sensors",Literal.parseLiteral("stop1(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop2(1)"));
-			addPercept("sensors",Literal.parseLiteral("stop3(1)"));
+		}
+		else if (action.getFunctor().equals("stop0")) {
+			addPercept("sensors",Literal.parseLiteral("stop(0)"));
 			return true;
 		} 
 		else if (action.getFunctor().equals("check_time_h")) {
