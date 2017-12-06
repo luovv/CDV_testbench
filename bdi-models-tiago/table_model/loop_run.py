@@ -1,33 +1,47 @@
 #!/usr/bin/env python
-
 import pexpect
 import time
 import re
+import random
+from itertools import product
 
-# Tree of belief decisions to write into meta agent
-choose_belief_1 = ["feed","clean","fridge","sink","recharge"] #For a-c
-choose_belief_2 = ["","stop"]
+def loop_run_rand(beliefs, num):
+    for ii in range(0,num):
+        f = open('meta_orders.txt', 'w')
+        for i in beliefs:
+            select = random.randint(0,len(i)-1)
+            f.write(i[select]+'\n')
+        f.close()
+        run_bdi()
+def loop_run(beliefs):
+    total=1
+    index_list=[]
+    for i in list(product(*beliefs)):
+        f = open('meta_orders.txt', 'a')
+        for j in i:
+            f.write(j+'\n')
+        f.close()
+        run_bdi()
+def run_bdi():
+    child = pexpect.spawn('./timed_hri.jar')
+    time.sleep(10)
+    pexpect.signal.SIGINT
+    f1 = open('result/coverage_robot.txt', 'a')
+    f1.write('------------\n')
+    f1.close()
+    i = 1
+    for num,command in enumerate(open('output.txt','r')): 
+        f = open('result/abstract_tests_rand300/abstract_test'+str(i)+'.txt', 'a')
+        if re.search("-------",command):
+            f.close()
+            i = i+1
+        else:
+            f.write(command)
 
-# Try all environment combinations once
-for i1 in choose_belief_1:
-	for i2 in choose_belief_2:
-		f = open('meta_orders.txt', 'w')
-		f.write(i1+'\n')
-		f.write(i2+'\n')
-		f.close()
-		child = pexpect.spawn('./timed_hri.jar')
-		time.sleep(5)
-		pexpect.signal.SIGINT
-		f1 = open('coverage_robot.txt', 'a')
-		f1.write('------------\n')
-		f1.close()
 
-#Separate tests in individual files
-# i = 1
-# for num,command in enumerate(open('output.txt','r')): 
-# 	f = open('abstract_tests/abstract_test'+str(i)+'.txt', 'a')
-# 	if re.search("-------",command):
-# 		f.close()
-# 		i = i+1
-# 	else:
-# 		f.write(command)
+beliefs = [
+    ["feed","clean","fridge","sink","recharge"],
+    ["","stop"]
+]
+loop_run(beliefs)
+# loop_run_rand(beliefs,num)
